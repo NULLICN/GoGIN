@@ -8,7 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func adminRoutersInit(r *gin.Engine) {
+func AdminRoutersInit(r *gin.Engine) {
 	adminGroup := r.Group("admin")
 	adminGroup.Use(middlewares.InitMiddlewares) // 配置路由的中间件
 	adminGroup.GET("/account", admin.AdminController{}.AdminAccount)
@@ -23,11 +23,11 @@ func middleware(c *gin.Context) {
 	fmt.Println("mid2Value:", mid2Value)
 }
 
-func main() {
+/*func main() {
 	gin.SetMode(gin.ReleaseMode)
 	r := gin.Default()
 	r.Use(middleware) // 全局中间件
-	adminRoutersInit(r)
+	AdminRoutersInit(r)
 	fmt.Println("Server is running on port 8080.")
 	r.Run(":8080")
-}
+}*/

@@ -10,8 +10,9 @@ import (
 
 func AdminRoutersInit(r *gin.Engine) {
 	adminGroup := r.Group("admin")
-	adminGroup.Use(middlewares.InitMiddlewares) // 配置路由的中间件
+	adminGroup.Use(middlewares.InitMiddlewares) // 配置路由级别的中间件
 	adminGroup.GET("/account", admin.AdminController{}.AdminAccount)
+	adminGroup.POST("/upload", admin.AdminController{}.AdminUploadFiles)
 }
 
 func middleware(c *gin.Context) {

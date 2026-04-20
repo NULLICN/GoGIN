@@ -19,3 +19,16 @@ func (admin AdminController) AdminAccount(c *gin.Context) {
 	midValue := c.GetString("mid")
 	fmt.Println("midValue:", midValue)
 }
+
+func (admin AdminController) AdminUploadFiles(c *gin.Context) {
+	form, _ := c.MultipartForm()
+	var filesName []string
+	for key, headers := range form.File {
+		fmt.Println(key, headers)
+		for _, header := range headers {
+			c.SaveUploadedFile(header, "uploads/"+header.Filename)
+			filesName = append(filesName, header.Filename)
+		}
+	}
+	admin.Success(c, filesName)
+}

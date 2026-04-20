@@ -5,14 +5,22 @@ import (
 	"GoGIN/itying/middlewares"
 	"fmt"
 
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
 )
 
 func AdminRoutersInit(r *gin.Engine) {
 	adminGroup := r.Group("admin")
+
+	// 添加路由级的session中间件
+	store := cookie.NewStore([]byte("secret")) // secret是加密密钥，可以自定义
+	adminGroup.Use(sessions.Sessions("mysession", store))
+
 	adminGroup.Use(middlewares.InitMiddlewares) // 配置路由级别的中间件
 	adminGroup.GET("/account", admin.AdminController{}.AdminAccount)
 	adminGroup.POST("/upload", admin.AdminController{}.AdminUploadFiles)
+	adminGroup.GET("/session", admin.AdminController{}.AdminSession)
 }
 
 func middleware(c *gin.Context) {

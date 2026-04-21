@@ -51,6 +51,8 @@ func (admin AdminController) AdminUploadFiles(c *gin.Context) {
 
 func (admin AdminController) AdminSession(c *gin.Context) {
 	session := sessions.Default(c)
+	db := models.DB
+	println("DB:", db)
 
 	if session.Get("hello") != "world" {
 		session.Set("hello", "world")

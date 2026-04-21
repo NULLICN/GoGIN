@@ -2,11 +2,10 @@ package routers
 
 import (
 	"GoGIN/itying/controller/admin"
-	"GoGIN/itying/middlewares"
 	"fmt"
 
 	"github.com/gin-contrib/sessions"
-	"github.com/gin-contrib/sessions/cookie"
+	"github.com/gin-contrib/sessions/redis"
 	"github.com/gin-gonic/gin"
 )
 
@@ -14,10 +13,16 @@ func AdminRoutersInit(r *gin.Engine) {
 	adminGroup := r.Group("admin")
 
 	// 添加路由级的session中间件
-	store := cookie.NewStore([]byte("secret")) // secret是加密密钥，可以自定义
+	//store := cookie.NewStore([]byte("secret")) // secret是加密密钥，可以自定义
+	store, err := redis.NewStore(10, "tcp", "47.109.80.234:6379", "", "040412", []byte("secret"))
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
 	adminGroup.Use(sessions.Sessions("mysession", store))
 
-	adminGroup.Use(middlewares.InitMiddlewares) // 配置路由级别的中间件
+	//adminGroup.Use(middlewares.InitMiddlewares) // 配置路由级别的中间件
 	adminGroup.GET("/account", admin.AdminController{}.AdminAccount)
 	adminGroup.POST("/upload", admin.AdminController{}.AdminUploadFiles)
 	adminGroup.GET("/session", admin.AdminController{}.AdminSession)
